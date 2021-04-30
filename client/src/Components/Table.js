@@ -1,10 +1,6 @@
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 
-const Table = ({ paginationsButton, currentPageClick, itemsForShow }) => {
-  // const items = useSelector((state) => state.items);
+const Table = ({itemsForShow}) => {
   return (
-    <>
       <table className="table table-bordered">
         <thead>
           <tr>
@@ -25,22 +21,6 @@ const Table = ({ paginationsButton, currentPageClick, itemsForShow }) => {
           ))}
         </tbody>
       </table>
-      <ul id="pagination" className="pagination justify-content-center">
-      <li className="page-item disabled">
-      <Link to="#" className="page-link" tabIndex="-1" aria-disabled="true">Предыдущая</Link>
-    </li>
-        {paginationsButton.map((p, tabIndex) => {
-         return <li key={tabIndex} className="page-item">
-            <Link to="#" className="page-link" onClick={() => {currentPageClick(p)}}>
-              {p}
-            </Link>
-          </li>;
-        })}
-        <li className="page-item">
-      <Link to="#" className="page-link">Следующая</Link>
-    </li>
-      </ul>
-    </>
   );
 };
 

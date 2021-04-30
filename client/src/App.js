@@ -4,6 +4,7 @@ import Header from "./Components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_ITEMS } from "./redux/Types";
 import { useEffect, useState } from "react";
+import Pagination from "./Components/Pagination";
 
 function App() {
   const items = useSelector((state) => state.items);
@@ -35,36 +36,38 @@ function App() {
     fetchItems();
     setIsLoaded(true);
     setTotalRow(items.length);
-  }, []);
+  }, [items.length]);
+
+  const currentPageClick = (pg) => {
+    setCurrentPageNum(pg); // функция клика на кнопки пагинации
+  };
 
   useEffect(() => {
-    if (totalRow > 0) {
-      const getQuantityPages = Math.ceil(totalRow / limitRowsPerPage); // вычисление количества страниц
-      setQuantityPages(getQuantityPages);
+    if (!isLoaded) {
+      return;
     }
-  }, [totalRow]);
+    const getQuantityPages = Math.ceil(totalRow / limitRowsPerPage); // вычисление количества страниц
+    setQuantityPages(getQuantityPages);
+    currentPageClick();
+  }, [isLoaded, totalRow]);
 
   const paginationsButton = [];
   for (let i = 1; i <= quantityPages; i++) {
-    paginationsButton.push(i);
+    paginationsButton.push(i); // определение значений для кнопок пагинации
   }
-  const currentPageClick = (pg) => {
-    setCurrentPageNum(pg);
-  };
-  const endRow = currentPageNum * limitRowsPerPage;
-  const startRow = endRow - limitRowsPerPage
+
+  const endRow = currentPageNum * limitRowsPerPage; //  постраничная навигация
+  const startRow = endRow - limitRowsPerPage;
   const itemsForShow = items.slice(startRow, endRow);
-  console.log(items[0], "0");
-  console.log(items[9], "9");
-  console.log(items[19], "19");
 
   return (
     <div className="container">
       <Header />
-      <Table
+      <Table itemsForShow={itemsForShow} />
+      <Pagination
+        isLoaded={isLoaded}
         paginationsButton={paginationsButton}
         currentPageClick={currentPageClick}
-        itemsForShow={itemsForShow}
       />
     </div>
   );
